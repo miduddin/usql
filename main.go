@@ -18,7 +18,20 @@ import (
 	"github.com/xo/usql/text"
 )
 
+var unsupportedEnvs = []string{
+	"PGHOSTADDR",
+	"PGSERVICE", "PGSERVICEFILE", "PGREALM",
+	"PGREQUIRESSL", "PGSSLCRL",
+	"PGREQUIREPEER",
+	"PGKRBSRVNAME", "PGGSSLIB",
+	"PGSYSCONFDIR", "PGLOCALEDIR",
+}
+
 func main() {
+	for _, v := range unsupportedEnvs {
+		os.Unsetenv(v)
+	}
+
 	// get available drivers and known build tags
 	available, known := drivers.Available(), internal.KnownBuildTags()
 	// report if database is supported
